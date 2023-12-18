@@ -4,7 +4,7 @@ import { User} from "../models/user.model.js"
 import {uploadOnCloudinary} from "../utils/cloudinary.js"
 import { ApiResponse } from "../utils/ApiResponce.js";
 
-const generateAccessTokenAndRefreshToken = async(userId){
+const generateAccessTokenAndRefreshToken = async (userId) => {
     try {
         const user = await User.findById(userId)
         if (!user) {
@@ -34,7 +34,6 @@ const registerUser = asyncHandler( async (req, res) => {
 
 
     const {fullName, email, username, password } = req.body
-    //console.log("email: ", email);
 
     if (
         [fullName, email, username, password].some((field) => field?.trim() === "")
@@ -104,6 +103,7 @@ const loginUser = asyncHandler( async (req, res) => {
     // send cookies
 
     const { email, username, password } = req.body
+
     if(!email && !username) {
         throw new ApiError(400, "Email or username is required")
     }
@@ -122,6 +122,7 @@ const loginUser = asyncHandler( async (req, res) => {
     }
 
     const { accessToken, refreshToken } = await generateAccessTokenAndRefreshToken(user._id)
+    // console.log(accessToken, refreshToken);
 
     const loggedInUser = await User.findById(user._id).select("-password -refreshToken")
     const options = {
